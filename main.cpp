@@ -1,31 +1,67 @@
 #define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
 #include <iostream>
-#include<GLFW/glfw3.h>
 #include <stdexcept>
+#include <cstdlib>
 
-using namespace std;
+const uint32_t WIDTH = 800;
+const uint32_t HEIGHT = 600;
 
-GLFWwindow * window;
+class HelloTriangleApplication
+{
+public:
+    void run()
+    {
+        initVulkan();
+        initWindow();
+        mainLoop();
+        cleanup();
+    }
+private:
+    GLFWwindow* window;
+
+    void initWindow()
+    {
+        glfwInit();
+
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+        window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+    }
+
+    void initVulkan()
+    {
+
+    }
+
+    void mainLoop()
+    {
+        while(!glfwWindowShouldClose(window))
+        {
+            glfwPollEvents();
+        }
+    }
+
+    void cleanup()
+    {
+        glfwDestroyWindow(window);
+        glfwTerminate();
+    }
+};
 
 int main()
 {
-    cout << "Hello World!" << endl;
-    glfwInit();
-    int a = 800;
-    int b = 500;
-    string name= "Kaustuv";
+    HelloTriangleApplication app;
 
-    //set GLFW to not work with OpenGL
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
-    window = glfwCreateWindow(a, b, name.c_str(), nullptr, nullptr);
-    while(!glfwWindowShouldClose(window))
+    try {
+        app.run();
+    } catch (const std::exception& e)
     {
-        glfwPollEvents();
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
     }
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
-    return 0;
+    return EXIT_SUCCESS;
 }
